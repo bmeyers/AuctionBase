@@ -53,11 +53,18 @@ def render_template(template_name, **context):
 urls = ('/', 'index',
         '/currtime', 'curr_time',
         '/selecttime', 'select_time',
+        '/browse', 'browse'
 )
 
 class index:
     def GET(self):
         return render_template('index.html')
+
+class browse:
+    def GET(self):
+        return render_template('browse.html')
+    def POST(self):
+        pass
 
 class curr_time:
     # A simple GET request, to '/currtime'
