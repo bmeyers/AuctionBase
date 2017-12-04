@@ -69,8 +69,6 @@ class browse:
         return render_template('browse.html')
     def POST(self):
         post_params = web.input()
-        logger.debug('browse.POST just got an input')
-        logger.debug(post_params.keys())
         itemid = post_params['itemid']
         userid = post_params['userid']
         category = post_params['category']
@@ -84,10 +82,14 @@ class browse:
             SELECT i.name, i.item_id, a.currently
             FROM Items i, Auctions a
             WHERE i.item_id = a.item_id
-            LIMIT 10;
         """
-        results = sqlitedb.query(query_string)
-        return render_template('results.html', results=results)
+        query_dict = {}
+        if len(itemid) > 0:
+            query_string += "AND i.item_id LIKE $itemid \n"
+            query_dict['itemid'] = '%' + str(itemid) + '%'
+        query_string += 'LIMIT 10;'
+        results = sqlitedb.query(query_string, query_dict)
+        return render_template('results.html', query= query_string, results=results)
 
 class curr_time:
     # A simple GET request, to '/currtime'

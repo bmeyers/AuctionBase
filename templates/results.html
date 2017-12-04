@@ -14,7 +14,7 @@
 <TR>
    <TD class="c1">{{item.item_id}}</TD>
    <TD class="c2">{{item.name}}</TD>
-   <TD class="c3">{{item.currently}}</TD>
+   <TD class="c3">{{"${:,.2f}".format(item.currently)}}</TD>
 </TR>
 {% endfor %}
 </table>
