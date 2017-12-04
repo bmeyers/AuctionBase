@@ -50,11 +50,16 @@ def render_template(template_name, **context):
 
 #####################END HELPER METHODS#####################
 
-urls = ('/currtime', 'curr_time',
+urls = ('/', 'index',
+        '/currtime', 'curr_time',
         '/selecttime', 'select_time',
         # TODO: add additional URLs here
         # first parameter => URL, second parameter => class name
         )
+
+class index:
+    def GET(self):
+        return render_template('index.html')
 
 class curr_time:
     # A simple GET request, to '/currtime'
