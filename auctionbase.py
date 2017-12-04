@@ -104,6 +104,12 @@ class browse:
         if len(description) > 0:
             query_string += "AND i.description LIKE $description \n"
             query_dict['description'] = '%' + str(description) + '%'
+        if len(minprice) > 0:
+            query_string += "AND a.currently > $minprice \n"
+            query_dict['minprice'] = minprice
+        if len(maxprice) > 0:
+            query_string += "AND a.currently < $maxprice \n"
+            query_dict['maxprice'] = maxprice
 
         query_string += 'LIMIT 50;'
         results = sqlitedb.query(query_string, query_dict)
