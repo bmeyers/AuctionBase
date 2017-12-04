@@ -83,6 +83,7 @@ class browse:
         query_string = """
             SELECT i.name, i.item_id, a.currently
             FROM Items i, Auctions a
+            WHERE i.item_id = a.item_id
             LIMIT 10;
         """
         results = sqlitedb.query(query_string)
