@@ -7,14 +7,16 @@
 <table id="results">
     <TR>
         <TH>Item ID</TH>
+        <TH>Seller ID</TH>
         <TH>Item Name</TH>
         <TH>Current Price</TH>
     </TR>
 {% for item in results %}
 <TR>
-   <TD class="c1">{{item.item_id}}</TD>
-   <TD class="c2">{{item.name}}</TD>
-   <TD class="c3">{{"${:,.2f}".format(item.currently)}}</TD>
+    <TD>{{item.item_id}}</TD>
+    <TD>{{item.seller_id}}</TD>
+    <TD>{{item.name}}</TD>
+    <TD>{{"${:,.2f}".format(item.currently)}}</TD>
 </TR>
 {% endfor %}
 </table>
