@@ -8,6 +8,10 @@ import sqlitedb
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 
+import logging
+logging.basicConfig(filename='log_file.log', level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING ABOVE THIS LINE!##########################
 ###########################################################################################
@@ -64,7 +68,25 @@ class browse:
     def GET(self):
         return render_template('browse.html')
     def POST(self):
-        pass
+        post_params = web.input()
+        logger.debug('browse.POST just got an input')
+        logger.debug(post_params.keys())
+        itemid = post_params['itemid']
+        userid = post_params['userid']
+        category = post_params['category']
+        description = post_params['description']
+        minprice = post_params['minprice']
+        maxprice = post_params['maxprice']
+        status = post_params['status']
+        print(status)
+
+        query_string = """
+            SELECT i.name, i.item_id, a.currently
+            FROM Items i, Auctions a
+            LIMIT 10;
+        """
+        results = sqlitedb.query(query_string)
+        return render_template('results.html', results=results)
 
 class curr_time:
     # A simple GET request, to '/currtime'
@@ -76,7 +98,7 @@ class curr_time:
         return render_template('curr_time.html', time = current_time)
 
 class select_time:
-    # Aanother GET request, this time to the URL '/selecttime'
+    # Another GET request, this time to the URL '/selecttime'
     def GET(self):
         return render_template('select_time.html')
 
@@ -87,6 +109,7 @@ class select_time:
     # and GET requests
     def POST(self):
         post_params = web.input()
+        logger.debug('select_time.POST just got an input')
         MM = post_params['MM']
         dd = post_params['dd']
         yyyy = post_params['yyyy']
