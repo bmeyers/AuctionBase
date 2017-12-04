@@ -79,14 +79,21 @@ class browse:
         print(status)
 
         query_string = """
-            SELECT i.name, i.item_id, a.currently
-            FROM Items i, Auctions a
+            SELECT i.name, i.item_id, a.seller_id, a.currently
+            FROM Items i, Auctions a, Categories c
             WHERE i.item_id = a.item_id
+            AND i.item_id = c.item_id
         """
         query_dict = {}
         if len(itemid) > 0:
             query_string += "AND i.item_id LIKE $itemid \n"
             query_dict['itemid'] = '%' + str(itemid) + '%'
+        if len(userid) > 0:
+            query_string += "AND a.seller_id LIKE $sellerid \n"
+            query_dict['sellerid'] = userid
+        if len(category) > 0:
+            query_string += "AND c.category_name LIKE $category \n"
+            query_dict['category'] = '%' + str(category) + '%'
         query_string += 'LIMIT 10;'
         results = sqlitedb.query(query_string, query_dict)
         return render_template('results.html', query= query_string, results=results)
