@@ -49,13 +49,11 @@ def render_template(template_name, **context):
     return jinja_env.get_template(template_name).render(context)
 
 #####################END HELPER METHODS#####################
-
+# first parameter => URL, second parameter => class name
 urls = ('/', 'index',
         '/currtime', 'curr_time',
         '/selecttime', 'select_time',
-        # TODO: add additional URLs here
-        # first parameter => URL, second parameter => class name
-        )
+)
 
 class index:
     def GET(self):
@@ -93,11 +91,18 @@ class select_time:
 
         selected_time = '%s-%s-%s %s:%s:%s' % (yyyy, MM, dd, HH, mm, ss)
         update_message = '(Hello, %s. Previously selected time was: %s.)' % (enter_name, selected_time)
-        # TODO: save the selected time as the current time in the database
-
-        # Here, we assign `update_message' to `message', which means
-        # we'll refer to it in our template as `message'
-        return render_template('select_time.html', message = update_message)
+        # save the selected time as the current time in the database
+        t = sqlitedb.transaction()
+        try:
+            query_string = "update CurrentTime set the_time = $selected_time"
+            sqlitedb.query(query_string, {'selected_time': selected_time})
+        except Exception as e:
+            t.rollback()
+            msg = 'tried to update time to '+selected_time+'\nERROR: '+str(e)
+            return render_template('select_time.html', message=msg)
+        else:
+            t.commit()
+            return render_template('select_time.html', message=update_message)
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################

@@ -47,7 +47,10 @@ def getItemById(item_id):
 # wrapper method around web.py's db.query method
 # check out http://webpy.org/cookbook/query for more info
 def query(query_string, vars = {}):
-    return list(db.query(query_string, vars))
+    try:
+        return list(db.query(query_string, vars))
+    except:
+        return db.query(query_string, vars)
 
 #####################END HELPER METHODS#####################
 
