@@ -101,6 +101,9 @@ class browse:
         if len(userid) > 0:
             query_string += "AND a.seller_id LIKE $sellerid \n"
             query_dict['sellerid'] = userid
+        if len(description) > 0:
+            query_string += "AND i.description LIKE $description \n"
+            query_dict['description'] = '%' + str(description) + '%'
 
         query_string += 'LIMIT 50;'
         results = sqlitedb.query(query_string, query_dict)
