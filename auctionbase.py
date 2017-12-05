@@ -61,7 +61,8 @@ urls = ('/(.*)/', 'redirect',
         '/selecttime', 'select_time',
         '/search', 'search',
         '/results', 'results',
-        '/view', 'view'
+        '/view', 'view',
+        '/add_bid', 'addbid'
 )
 
 class redirect:
@@ -250,6 +251,12 @@ class view:
         except ValueError:
             item_id = None
         return self.GET(itemid=item_id)
+
+class addbid:
+    def GET(self):
+        return render_template('addbid.html')
+    def POST(self):
+        pass
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################
