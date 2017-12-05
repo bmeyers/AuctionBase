@@ -12,6 +12,7 @@
 <dd><a href="/view">Search Again</a></dd>
 <dd><a href="/">Home</a></dd>
 </dl>
+<h4>Item Overview</h4>
 <table id="results">
     <TR>
         <TH>Item ID</TH>
@@ -36,6 +37,31 @@
 </TR>
 {% endfor %}
 </table>
+{% if result[0].number_of_bids > 0 %}
+<h4>Bids on Item</h4>
+<table id="results">
+    <TR>
+        <TH>Bidder ID</TH>
+        <TH>Bid Amount</TH>
+        <TH>Time of Bid</TH>
+    </TR>
+{% for item in bids %}
+<TR>
+    <TD>{{item.bidder_id}}</TD>
+    <TD>{{"${:,.2f}".format(item.amount)}}</TD>
+    <TD>{{item.time}}</TD>
+</TR>
+{% endfor %}
+</table>
+{% else %}
+{% if status == 'open' %}
+<h4>No bids have been placed on this auction</h4>
+{% elif status == 'closed' %}
+<h4>No bids were placed on this auction</h4>
+{% else %}
+<h4>No bids can be entered because auction as not started</h4>
+{% endif %}
+{% endif %}
 <h4>Item Categories</h4>
 <UL>
     {% for item in categories %}
