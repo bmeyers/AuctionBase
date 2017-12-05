@@ -80,7 +80,10 @@ class search:
         post_params = web.input()
         itemid = post_params['itemID']
         userid = post_params['userID']
-        name = post_params['name']
+        try:
+            name = post_params['name']
+        except KeyError:
+            name = ''
         category = post_params['category']
         description = post_params['description']
         minprice = post_params['minPrice']
