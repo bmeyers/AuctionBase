@@ -2,10 +2,52 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 <h3>Browse AuctionBase</h3>
+{% if results is not defined %}
 <form method="POST" action="search" class="form-inline" enctype="multipart/form-data">
     <div class="alert alert-info">Please make your selection below. A blank search will return all entries.</div>
     {% include 'browsetable.html' %}
 </form>
 <a href="index">Home</a>
+{% else %}
+
+{% if page is number %}
+<div class="alert alert-info">Search results, page {{ page }}</div>
+{% else %}
+<div class="alert alert-info">Search results</div>
+{% endif %}
+<dl>
+    <dd><a href="search">Search Again</a></dd>
+    <dd><a href="index">Home</a></dd>
+    {% if page > 1 %}
+    <dd><a href="results?query={{ query }}&query_dict={{ query_dict }}&page={{ page - 1 }}">Previous Page</a></dd>
+    {% endif %}
+    <dd><a href="results?query={{ query }}&query_dict={{ query_dict }}&page={{ page + 1 }}">Next Page</a></dd>
+</dl>
+
+<table id="results">
+    <TR>
+        <TH>Item ID</TH>
+        <TH>Seller ID</TH>
+        <TH>Item Name</TH>
+        <TH>Current Price</TH>
+        <TH>Number of Bids</TH>
+    </TR>
+{% for item in results %}
+<TR>
+    <TD><a href="view?itemID={{item.item_id}}">{{item.item_id}}</a></TD>
+    <TD>{{item.seller_id}}</TD>
+    <TD>{{item.name}}</TD>
+    <TD>{{"${:,.2f}".format(item.currently)}}</TD>
+    <TD>{{item.number_of_bids}}</TD>
+</TR>
+{% endfor %}
+</table>
+<dl>
+<dd><a href="search">Search Again</a></dd>
+<dd><a href="index">Home</a></dd>
+</dl>
+
+{% endif %}
+
 {# also make sure to include this very last line as well #}
 {% endblock %}

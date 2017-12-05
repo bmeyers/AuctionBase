@@ -144,7 +144,7 @@ class search:
         results = sqlitedb.query(query_string, query_dict)
         page = 1
         query_string = ' '.join(query_string.split())
-        return render_template('results.html', query= query_string, results=results, query_dict=query_dict, page=page)
+        return render_template('browse.html', query= query_string, results=results, query_dict=query_dict, page=page)
 
 class results:
     def GET(self):
