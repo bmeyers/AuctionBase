@@ -255,7 +255,12 @@ class view:
 
 class addbid:
     def GET(self):
-        return render_template('addbid.html')
+        try:
+            get_params = web.input()
+            itemID = get_params['itemID']
+            return render_template('addbid.html', itemID=itemID)
+        except Exception as e:
+            return render_template('addbid.html')
     def POST(self):
         post_params = web.input()
         logger.debug('addbid.POST just got an input')

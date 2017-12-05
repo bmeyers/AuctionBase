@@ -37,6 +37,9 @@
 </TR>
 {% endfor %}
 </table>
+{% if status == 'open' %}
+<h5><a href="/add_bid?itemID={{result[0].item_id}}">Place a bid!</a></h5>
+{% endif %}
 {% if result[0].number_of_bids > 0 %}
 {% if status == 'closed' %}
 <h5>Winning bid: {{bids[0].bidder_id}}</h5>
