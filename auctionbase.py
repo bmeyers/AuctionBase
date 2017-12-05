@@ -90,7 +90,6 @@ class search:
         minprice = post_params['minPrice']
         maxprice = post_params['maxPrice']
         status = post_params['status']
-        print(status)
 
 
         query_dict = {}
