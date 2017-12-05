@@ -10,7 +10,7 @@ from datetime import datetime
 
 from ast import literal_eval
 import logging
-logging.basicConfig(filename='log_file.log', level=logging.DEBUG)
+logging.basicConfig(filename='log_file.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ###########################################################################################
@@ -61,7 +61,7 @@ urls = ('/(.*)/', 'redirect',
         '/selecttime', 'select_time',
         '/browse', 'browse',
         '/results', 'results',
-        '/view(.+)', 'view'
+        '/view', 'view'
 )
 
 class redirect:
@@ -139,11 +139,11 @@ class browse:
 
 class results:
     def GET(self):
-        post_params = web.input(query=None, results=None, page=None, query_dict=None)
-        query = post_params.query
-        query_dict = literal_eval(post_params.query_dict)
-        results = post_params.results
-        page = int(post_params.page)
+        get_params = web.input(query=None, results=None, page=None, query_dict=None)
+        query = get_params.query
+        query_dict = literal_eval(get_params.query_dict)
+        results = get_params.results
+        page = int(get_params.page)
         logging.debug(str(query)+' '+str(results))
         if page == 1:
             results = sqlitedb.query(query, query_dict)
@@ -201,7 +201,22 @@ class select_time:
 
 class view:
     def GET(self):
-        pass
+        get_params = web.input(item_id=None)
+        item_id = get_params.item_id
+        if item_id:
+            item_id = int(item_id)
+            qd1 = {}
+            q1 = """
+                SELECT *
+                FROM Items i, Auctions a
+                WHERE i.item_id = a.item_id
+                    AND i.item_id = $item_id
+            """
+            qd1['item_id'] = item_id
+            result = sqlitedb.query(q1, qd1)
+        else:
+            result = None
+        return render_template('view.html', result=result)
     def POST(self):
         pass
 

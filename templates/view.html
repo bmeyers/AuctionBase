@@ -1,0 +1,15 @@
+{% extends "app_base.html" %}
+{% block content %}
+<h3>View Auction</h3>
+{% if not result %}
+<div class="alert alert-info">Please select an item</div>
+<form method="POST" action="view" class="form-inline">
+    {% include 'viewauctionform.html' %}
+</form>
+{% else %}
+{% endif %}
+<dl>
+<dd><a href="/browse">Search Again</a></dd>
+<dd><a href="/">Home</a></dd>
+</dl>
+{% endblock %}
