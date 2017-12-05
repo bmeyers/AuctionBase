@@ -38,6 +38,9 @@
 {% endfor %}
 </table>
 {% if result[0].number_of_bids > 0 %}
+{% if status == 'closed' %}
+<h5>Winning bid: {{bids[0].bidder_id}}</h5>
+{% endif %}
 <h4>Bids on Item</h4>
 <table id="results">
     <TR>
