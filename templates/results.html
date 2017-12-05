@@ -9,10 +9,10 @@
 <div class="alert alert-info">Search results</div>
 {% endif %}
 <dl>
-    <dd><a href="/browse">Search Again</a></dd>
+    <dd><a href="/search">Search Again</a></dd>
     <dd><a href="/">Home</a></dd>
     {% if page > 1 %}
-    <dd><a href="/results?query={{ query }}&query_dict={{ query_dict }}&page={{ page - 1 }}">Last Page</a></dd>
+    <dd><a href="/results?query={{ query }}&query_dict={{ query_dict }}&page={{ page - 1 }}">Previous Page</a></dd>
     {% endif %}
     <dd><a href="/results?query={{ query }}&query_dict={{ query_dict }}&page={{ page + 1 }}">Next Page</a></dd>
 </dl>
@@ -37,7 +37,7 @@
 </table>
 {% endif %}
 <dl>
-<dd><a href="/browse">Search Again</a></dd>
+<dd><a href="/search">Search Again</a></dd>
 <dd><a href="/">Home</a></dd>
 </dl>
 {# also make sure to include this very last line as well #}

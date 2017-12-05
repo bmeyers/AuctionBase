@@ -2,8 +2,8 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 <h3>Browse AuctionBase</h3>
-<form method="POST" action="browse" class="form-inline">
-    <div class="alert alert-info">Please make your selection below</div>
+<form method="POST" action="search" class="form-inline">
+    <div class="alert alert-info">Please make your selection below. A blank search will return all entries.</div>
     {% include 'browsetable.html' %}
 </form>
 <a href="/">Home</a>

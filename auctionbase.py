@@ -59,7 +59,7 @@ urls = ('/(.*)/', 'redirect',
         '/', 'index',
         '/currtime', 'curr_time',
         '/selecttime', 'select_time',
-        '/browse', 'browse',
+        '/search', 'search',
         '/results', 'results',
         '/view', 'view'
 )
@@ -72,7 +72,7 @@ class index:
     def GET(self):
         return render_template('index.html')
 
-class browse:
+class search:
     def GET(self):
         return render_template('browse.html')
     def POST(self):
