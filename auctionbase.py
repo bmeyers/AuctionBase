@@ -200,12 +200,12 @@ class select_time:
             return render_template('select_time.html', message=update_message)
 
 class view:
-    def GET(self, item_id=None):
-        if not item_id:
+    def GET(self, itemid=None):
+        if not itemid:
             get_params = web.input(item_id=None)
-            item_id = get_params.item_id
-        if item_id and item_id != '':
-            item_id = int(item_id)
+            itemid = get_params.item_id
+        if itemid and itemid != '':
+            itemid = int(itemid)
             qd1 = {}
             q1 = """
                 SELECT *
@@ -213,7 +213,7 @@ class view:
                 WHERE i.item_id = a.item_id
                     AND i.item_id = $item_id
             """
-            qd1['item_id'] = item_id
+            qd1['item_id'] = itemid
             result = sqlitedb.query(q1, qd1)
             current_time = string_to_time(sqlitedb.getTime())
             start_time = string_to_time(result[0].started)
@@ -249,7 +249,7 @@ class view:
             item_id = int(post_params.itemid)
         except ValueError:
             item_id = None
-        return self.GET(item_id=item_id)
+        return self.GET(itemid=item_id)
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################
