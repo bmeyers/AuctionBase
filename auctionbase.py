@@ -80,6 +80,7 @@ class search:
         post_params = web.input()
         itemid = post_params['itemid']
         userid = post_params['userid']
+        name = post_params['name']
         category = post_params['category']
         description = post_params['description']
         minprice = post_params['minprice']
@@ -110,7 +111,10 @@ class search:
             query_dict['itemid'] = '%' + str(itemid) + '%'
         if len(userid) > 0:
             query_string += "AND a.seller_id LIKE $sellerid \n"
-            query_dict['sellerid'] = userid
+            query_dict['sellerid'] = '%' + str(userid) + '%'
+        if len(name) > 0:
+            query_string += "AND i.name LIKE $name \n"
+            query_dict['name'] = '%' + str(name) + '%'
         if len(description) > 0:
             query_string += "AND i.description LIKE $description \n"
             query_dict['description'] = '%' + str(description) + '%'
@@ -281,7 +285,7 @@ class addbid:
         except Exception as e:
             t.rollback()
             msg = 'Sorry, that was not a legal bid. ERROR: ' + str(e)
-            return render_template('addbid.html', message=msg)
+            return render_template('addbid.html', message=msg, itemID=itemid, userID=bidderid)
         else:
             t.commit()
             msg = 'Your bid is logged. Good luck!'
