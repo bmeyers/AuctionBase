@@ -1,4 +1,4 @@
-<link rel=stylesheet type=text/css href="/static/style.css">
+<link rel=stylesheet type=text/css href="../static/style.css">
 {% extends "app_base.html" %}
 {% block content %}
 <h3>View Auction</h3>
@@ -39,7 +39,7 @@
 </table>
 {% if status == 'open' %}
 Status: OPEN
-<h5><a href="/add_bid?itemID={{result[0].item_id}}">Place a bid!</a></h5>
+<h5><a href="add_bid?itemID={{result[0].item_id}}">Place a bid!</a></h5>
 {% else %}
 Status: CLOSED
 {% endif %}

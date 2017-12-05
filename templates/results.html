@@ -1,4 +1,4 @@
-<link rel=stylesheet type=text/css href="/static/style.css">
+<link rel=stylesheet type=text/css href="../static/style.css">
 {% extends "app_base.html" %}
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
@@ -12,9 +12,9 @@
     <dd><a href="search">Search Again</a></dd>
     <dd><a href="index">Home</a></dd>
     {% if page > 1 %}
-    <dd><a href="/results?query={{ query }}&query_dict={{ query_dict }}&page={{ page - 1 }}">Previous Page</a></dd>
+    <dd><a href="results?query={{ query }}&query_dict={{ query_dict }}&page={{ page - 1 }}">Previous Page</a></dd>
     {% endif %}
-    <dd><a href="/results?query={{ query }}&query_dict={{ query_dict }}&page={{ page + 1 }}">Next Page</a></dd>
+    <dd><a href="results?query={{ query }}&query_dict={{ query_dict }}&page={{ page + 1 }}">Next Page</a></dd>
 </dl>
 {% if results %}
 <table id="results">
@@ -27,7 +27,7 @@
     </TR>
 {% for item in results %}
 <TR>
-    <TD><a href="/view?itemID={{item.item_id}}">{{item.item_id}}</a></TD>
+    <TD><a href="view?itemID={{item.item_id}}">{{item.item_id}}</a></TD>
     <TD>{{item.seller_id}}</TD>
     <TD>{{item.name}}</TD>
     <TD>{{"${:,.2f}".format(item.currently)}}</TD>
