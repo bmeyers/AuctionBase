@@ -27,7 +27,7 @@
     </TR>
 {% for item in results %}
 <TR>
-    <TD><a href="/view?item_id={{item.item_id}}">{{item.item_id}}</a></TD>
+    <TD><a href="/view?itemID={{item.item_id}}">{{item.item_id}}</a></TD>
     <TD>{{item.seller_id}}</TD>
     <TD>{{item.name}}</TD>
     <TD>{{"${:,.2f}".format(item.currently)}}</TD>

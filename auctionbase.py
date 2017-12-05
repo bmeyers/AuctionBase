@@ -78,13 +78,13 @@ class search:
         return render_template('browse.html')
     def POST(self):
         post_params = web.input()
-        itemid = post_params['itemid']
-        userid = post_params['userid']
+        itemid = post_params['itemID']
+        userid = post_params['userID']
         name = post_params['name']
         category = post_params['category']
         description = post_params['description']
-        minprice = post_params['minprice']
-        maxprice = post_params['maxprice']
+        minprice = post_params['minPrice']
+        maxprice = post_params['maxPrice']
         status = post_params['status']
         print(status)
 
@@ -207,8 +207,8 @@ class select_time:
 class view:
     def GET(self, itemid=None):
         if not itemid:
-            get_params = web.input(item_id=None)
-            itemid = get_params.item_id
+            get_params = web.input(itemID=None)
+            itemid = get_params.itemID
         if itemid and itemid != '':
             itemid = int(itemid)
             qd1 = {}
@@ -250,9 +250,8 @@ class view:
                                bids = bids)
     def POST(self):
         post_params = web.input()
-        t = sqlitedb.transaction()
         try:
-            item_id = int(post_params.itemid)
+            item_id = int(post_params.itemID)
         except ValueError:
             item_id = None
         return self.GET(itemid=item_id)

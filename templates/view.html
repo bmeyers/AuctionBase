@@ -38,11 +38,14 @@
 {% endfor %}
 </table>
 {% if status == 'open' %}
+Status: OPEN
 <h5><a href="/add_bid?itemID={{result[0].item_id}}">Place a bid!</a></h5>
+{% else %}
+Status: CLOSED
 {% endif %}
 {% if result[0].number_of_bids > 0 %}
 {% if status == 'closed' %}
-<h5>Winning bid: {{bids[0].bidder_id}}</h5>
+<h5>Winning Bid: {{bids[0].bidder_id}}</h5>
 {% endif %}
 <h4>Bids on Item</h4>
 <table id="results">
@@ -63,7 +66,7 @@
 {% if status == 'open' %}
 <h4>No bids have been placed on this auction</h4>
 {% elif status == 'closed' %}
-<h4>No bids were placed on this auction</h4>
+<h4>No bids were placed on this auction, No Winning Bid</h4>
 {% else %}
 <h4>No bids can be entered because auction as not started</h4>
 {% endif %}
