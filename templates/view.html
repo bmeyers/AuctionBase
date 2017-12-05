@@ -1,3 +1,4 @@
+<link rel=stylesheet type=text/css href="/static/style.css">
 {% extends "app_base.html" %}
 {% block content %}
 <h3>View Auction</h3>
@@ -7,9 +8,45 @@
     {% include 'viewauctionform.html' %}
 </form>
 {% else %}
+<dl>
+<dd><a href="/view">Search Again</a></dd>
+<dd><a href="/">Home</a></dd>
+</dl>
+<table id="results">
+    <TR>
+        <TH>Item ID</TH>
+        <TH>Seller ID</TH>
+        <TH>Item Name</TH>
+        <TH>Current Price</TH>
+        <TH>Number of bids</TH>
+        <TH>Status</TH>
+        <TH>Auction Start</TH>
+        <TH>Auction End</TH>
+    </TR>
+{% for item in result %}
+<TR>
+    <TD>{{item.item_id}}</TD>
+    <TD>{{item.seller_id}}</TD>
+    <TD>{{item.name}}</TD>
+    <TD>{{"${:,.2f}".format(item.currently)}}</TD>
+    <TD>{{item.number_of_bids}}</TD>
+    <TD>{{status}}</TD>
+    <TD>{{item.started}}</TD>
+    <TD>{{item.ends}}</TD>
+</TR>
+{% endfor %}
+</table>
+<h4>Item Categories</h4>
+<UL>
+    {% for item in categories %}
+    <LI>{{item.category_name}}</LI>
+    {% endfor %}
+</UL>
+<h4>Item Description</h4>
+<p>{{result[0].description}}</p>
 {% endif %}
 <dl>
-<dd><a href="/browse">Search Again</a></dd>
+<dd><a href="/view">Search Again</a></dd>
 <dd><a href="/">Home</a></dd>
 </dl>
 {% endblock %}

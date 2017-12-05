@@ -91,7 +91,7 @@ class browse:
         current_time = sqlitedb.getTime()
         if len(category) > 0:
             query_string = """
-                        SELECT i.name, i.item_id, a.seller_id, a.currently
+                        SELECT i.name, i.item_id, a.seller_id, a.currently, a.number_of_bids
                         FROM Items i, Auctions a, Categories c
                         WHERE i.item_id = a.item_id
                         AND i.item_id = c.item_id
@@ -100,7 +100,7 @@ class browse:
             query_dict['category'] = '%' + str(category) + '%'
         else:
             query_string = """
-                        SELECT i.name, i.item_id, a.seller_id, a.currently
+                        SELECT i.name, i.item_id, a.seller_id, a.currently, a.number_of_bids
                         FROM Items i, Auctions a
                         WHERE i.item_id = a.item_id
                     """
@@ -200,9 +200,10 @@ class select_time:
             return render_template('select_time.html', message=update_message)
 
 class view:
-    def GET(self):
-        get_params = web.input(item_id=None)
-        item_id = get_params.item_id
+    def GET(self, item_id=None):
+        if not item_id:
+            get_params = web.input(item_id=None)
+            item_id = get_params.item_id
         if item_id:
             item_id = int(item_id)
             qd1 = {}
@@ -214,11 +215,30 @@ class view:
             """
             qd1['item_id'] = item_id
             result = sqlitedb.query(q1, qd1)
+            current_time = string_to_time(sqlitedb.getTime())
+            start_time = string_to_time(result[0].started)
+            end_time = string_to_time(result[0].ends)
+            if start_time <= current_time and end_time > current_time:
+                status = 'open'
+            elif start_time <= current_time and end_time <= current_time:
+                status = 'closed'
+            else:
+                status = 'not yet started'
+            q2 = """
+                SELECT category_name
+                FROM Categories
+                WHERE item_id = $item_id
+            """
+            categories = sqlitedb.query(q2, qd1)
         else:
             result = None
-        return render_template('view.html', result=result)
+            status = None
+            categories = None
+        return render_template('view.html', result=result, status=status, categories=categories)
     def POST(self):
-        pass
+        post_params = web.input()
+        item_id = int(post_params.itemid)
+        return self.GET(item_id=item_id)
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################

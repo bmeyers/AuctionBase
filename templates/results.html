@@ -23,6 +23,7 @@
         <TH>Seller ID</TH>
         <TH>Item Name</TH>
         <TH>Current Price</TH>
+        <TH>Number of Bids</TH>
     </TR>
 {% for item in results %}
 <TR>
@@ -30,6 +31,7 @@
     <TD>{{item.seller_id}}</TD>
     <TD>{{item.name}}</TD>
     <TD>{{"${:,.2f}".format(item.currently)}}</TD>
+    <TD>{{item.number_of_bids}}</TD>
 </TR>
 {% endfor %}
 </table>
