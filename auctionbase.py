@@ -57,6 +57,7 @@ def render_template(template_name, **context):
 # first parameter => URL, second parameter => class name
 urls = ('/(.*)/', 'redirect',
         '/', 'index',
+        '/index', 'index',
         '/currtime', 'curr_time',
         '/selecttime', 'select_time',
         '/search', 'search',
