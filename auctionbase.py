@@ -282,12 +282,14 @@ class addbid:
             }
             logger.debug(query_dict)
             sqlitedb.db.insert('Bids', **query_dict)
+            t.commit()
         except Exception as e:
             t.rollback()
+            if str(e) == 'FOREIGN KEY constraint failed':
+                e = 'Username not recognized'
             msg = 'Sorry, that was not a legal bid. ERROR: ' + str(e)
             return render_template('addbid.html', message=msg, itemID=itemid, userID=bidderid)
         else:
-            t.commit()
             msg = 'Your bid is logged. Good luck!'
             return render_template('addbid.html', message=msg)
 
