@@ -204,7 +204,7 @@ class view:
         if not item_id:
             get_params = web.input(item_id=None)
             item_id = get_params.item_id
-        if item_id:
+        if item_id and item_id != '':
             item_id = int(item_id)
             qd1 = {}
             q1 = """
@@ -230,14 +230,25 @@ class view:
                 WHERE item_id = $item_id
             """
             categories = sqlitedb.query(q2, qd1)
+            q3 = """
+                SELECT * from Bids
+                WHERE item_id = $item_id
+                ORDER BY time DESC
+            """
+            bids = sqlitedb.query(q3, qd1)
         else:
             result = None
             status = None
             categories = None
-        return render_template('view.html', result=result, status=status, categories=categories)
+            bids = None
+        return render_template('view.html', result=result, status=status, categories=categories,
+                               bids = bids)
     def POST(self):
         post_params = web.input()
-        item_id = int(post_params.itemid)
+        try:
+            item_id = int(post_params.itemid)
+        except ValueError:
+            item_id = None
         return self.GET(item_id=item_id)
 
 ###########################################################################################
