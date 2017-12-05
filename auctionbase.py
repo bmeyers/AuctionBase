@@ -8,6 +8,7 @@ import sqlitedb
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 
+from ast import literal_eval
 import logging
 logging.basicConfig(filename='log_file.log', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -54,11 +55,18 @@ def render_template(template_name, **context):
 
 #####################END HELPER METHODS#####################
 # first parameter => URL, second parameter => class name
-urls = ('/', 'index',
+urls = ('/(.*)/', 'redirect',
+        '/', 'index',
         '/currtime', 'curr_time',
         '/selecttime', 'select_time',
-        '/browse', 'browse'
+        '/browse', 'browse',
+        '/results', 'results',
+        '/view(.+)', 'view'
 )
+
+class redirect:
+    def GET(self, path):
+        web.seeother('/' + path)
 
 class index:
     def GET(self):
@@ -80,6 +88,7 @@ class browse:
 
 
         query_dict = {}
+        current_time = sqlitedb.getTime()
         if len(category) > 0:
             query_string = """
                         SELECT i.name, i.item_id, a.seller_id, a.currently
@@ -110,10 +119,39 @@ class browse:
         if len(maxprice) > 0:
             query_string += "AND a.currently < $maxprice \n"
             query_dict['maxprice'] = maxprice
+        if status == 'all':
+            pass
+        elif status == 'open':
+            query_string += "AND a.started <= $the_time and a.ends > $the_time \n"
+            query_dict['the_time'] = current_time
+        elif status == 'closed':
+            query_string += "AND a.ends <= $the_time \n"
+            query_dict['the_time'] = current_time
+        elif status == 'not started':
+            query_string += "AND a.started > $the_time \n"
+            query_dict['the_time'] = current_time
 
-        query_string += 'LIMIT 50;'
+        query_string += 'LIMIT 50'
         results = sqlitedb.query(query_string, query_dict)
-        return render_template('results.html', query= query_string, results=results)
+        page = 1
+        query_string = ' '.join(query_string.split())
+        return render_template('results.html', query= query_string, results=results, query_dict=query_dict, page=page)
+
+class results:
+    def GET(self):
+        post_params = web.input(query=None, results=None, page=None, query_dict=None)
+        query = post_params.query
+        query_dict = literal_eval(post_params.query_dict)
+        results = post_params.results
+        page = int(post_params.page)
+        logging.debug(str(query)+' '+str(results))
+        if page == 1:
+            results = sqlitedb.query(query, query_dict)
+        else:
+            offset = (page - 1) * 50
+            query_dict['offset'] = offset
+            results = sqlitedb.query(query+'\n OFFSET $offset', query_dict)
+        return render_template('results.html', query=query, query_dict=query_dict, results=results, page=page)
 
 class curr_time:
     # A simple GET request, to '/currtime'
@@ -160,6 +198,12 @@ class select_time:
         else:
             t.commit()
             return render_template('select_time.html', message=update_message)
+
+class view:
+    def GET(self):
+        pass
+    def POST(self):
+        pass
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################

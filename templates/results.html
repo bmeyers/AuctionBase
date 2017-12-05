@@ -3,11 +3,20 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 <h3>Browse AuctionBase</h3>
-  <div class="alert alert-info">Search results</div>
+{% if page is number %}
+<div class="alert alert-info">Search results, page {{ page }}</div>
+{% else %}
+<div class="alert alert-info">Search results</div>
+{% endif %}
 <dl>
-<dd><a href="/browse">Search Again</a></dd>
-<dd><a href="/">Home</a></dd>
+    <dd><a href="/browse">Search Again</a></dd>
+    <dd><a href="/">Home</a></dd>
+    {% if page > 1 %}
+    <dd><a href="/results?query={{ query }}&query_dict={{ query_dict }}&page={{ page - 1 }}">Last Page</a></dd>
+    {% endif %}
+    <dd><a href="/results?query={{ query }}&query_dict={{ query_dict }}&page={{ page + 1 }}">Next Page</a></dd>
 </dl>
+{% if results %}
 <table id="results">
     <TR>
         <TH>Item ID</TH>
@@ -24,6 +33,7 @@
 </TR>
 {% endfor %}
 </table>
+{% endif %}
 <dl>
 <dd><a href="/browse">Search Again</a></dd>
 <dd><a href="/">Home</a></dd>
