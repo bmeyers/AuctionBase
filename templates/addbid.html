@@ -2,7 +2,10 @@
 {% block content %}
 {# include the first two lines above to extend the app_base template #}
 <h3>Place a bid</h3>
-<form method="POST" action="addbid" class="form-inline">
+{% if message is defined %}
+<div class="alert alert-warning">{{ message }}</div>
+{% endif %}
+<form method="POST" action="add_bid" class="form-inline">
     {% include 'bidform.html' %}
 </form>
 <a href="/">Home</a>

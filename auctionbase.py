@@ -246,6 +246,7 @@ class view:
                                bids = bids)
     def POST(self):
         post_params = web.input()
+        t = sqlitedb.transaction()
         try:
             item_id = int(post_params.itemid)
         except ValueError:
@@ -256,7 +257,30 @@ class addbid:
     def GET(self):
         return render_template('addbid.html')
     def POST(self):
-        pass
+        post_params = web.input()
+        logger.debug('addbid.POST just got an input')
+        itemid = post_params['itemID']
+        bidderid = post_params['userID']
+        bid_amount = post_params['price']
+        the_time = sqlitedb.getTime()
+        t = sqlitedb.transaction()
+        try:
+            query_dict = {
+                'time': str(the_time),
+                'bidder_id': str(bidderid),
+                'item_id': int(itemid),
+                'amount': float(bid_amount)
+            }
+            logger.debug(query_dict)
+            sqlitedb.db.insert('Bids', **query_dict)
+        except Exception as e:
+            t.rollback()
+            msg = 'Sorry, that was not a legal bid. ERROR: ' + str(e)
+            return render_template('addbid.html', message=msg)
+        else:
+            t.commit()
+            msg = 'Your bid is logged. Good luck!'
+            return render_template('addbid.html', message=msg)
 
 ###########################################################################################
 ##########################DO NOT CHANGE ANYTHING BELOW THIS LINE!##########################
